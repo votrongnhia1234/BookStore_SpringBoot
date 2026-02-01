@@ -4,72 +4,266 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Cart</title>
+    <title>Shopping Cart - BookStore</title>
     <th:block th:replace="~{layout::link-css}"></th:block>
     <th:block th:replace="~{layout::custom-css}"></th:block>
+    <style>
+        .cart-header {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 2rem 0;
+        }
+        
+        .cart-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .cart-items {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            gap: 1rem;
+        }
+        
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-details {
+            flex: 1;
+        }
+        
+        .item-details h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+        
+        .item-details p {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        .item-quantity {
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .item-price {
+            min-width: 100px;
+            text-align: right;
+        }
+        
+        .item-price .price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .remove-btn {
+            display: inline-block;
+            padding: 0.5rem 0.75rem;
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .remove-btn:hover {
+            background: #fecaca;
+            color: #991b1b;
+        }
+        
+        .cart-summary {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .summary-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            color: #6b7280;
+        }
+        
+        .summary-row.total {
+            border-bottom: none;
+            padding-top: 1rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .continue-shopping {
+            width: 100%;
+            padding: 0.75rem;
+            background: white;
+            color: #1f2937;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: block;
+            margin-top: 1rem;
+        }
+        
+        .continue-shopping:hover {
+            border-color: #1f2937;
+            background: #f3f4f6;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        .empty-cart-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-cart h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-cart p {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .cart-item {
+                flex-wrap: wrap;
+            }
+            
+            .item-quantity,
+            .item-price {
+                min-width: auto;
+                width: 100%;
+                text-align: left;
+                margin-top: 0.5rem;
+            }
+            
+            .cart-summary {
+                position: static;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <th:block th:replace="~{layout::header}"></th:block>
-    <div class="container" th:if="${not #lists.isEmpty(cart.cartItems)}">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Book ID</th>
-                    <th scope="col">Book Name</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="item : ${cart.cartItems}">
-                    <td th:text="${item.getBookId()}"></td>
-                    <td th:text="${item.getBookName()}"></td>
-                    <td>
-                        <label>
-                            <input type="number" min="1" th:value="${item.getQuantity()}"
-                                th:attr="data-id=${item.getBookId()}" class="form-control quantity">
-                        </label>
-                    </td>
-                    <td th:text="${item.getPrice()}"></td>
-                    <td th:text="${item.getPrice() * item.getQuantity()}"></td>
-                    <td>
-                        <a class="btn btn-danger" th:href="@{/cart/removeFromCart/{id}(id=${item.getBookId()})}">
-                            Remove
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>Total: <span th:text="${totalPrice}"></span></h3>
-            </div>
-            <div class="col-md-12 text-center">
-                <a class="btn btn-success" th:href="@{/cart/checkout}">Checkout</a>
-                <a class="btn btn-danger" th:href="@{/cart/clearCart}">Clear Cart</a>
-            </div>
-        </div>
-    </div>
-    <div class="container" th:if="${#lists.isEmpty(cart.cartItems)}">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 offset-md-3 text-center">
-                    <h3 class="mt-5">Your cart is empty</h3>
-                    <p class="lead">Please add some books to your cart</p>
-                    <a class="btn btn-primary" href="/books">Go to list
-                        book</a>
+    
+    <main class="container">
+        <h1 class="cart-header">🛒 Shopping Cart</h1>
+        
+        <div th:if="${items != null && items.size() > 0}">
+            <div class="cart-container">
+                <div class="cart-items">
+                    <div class="cart-item" th:each="item : ${items}">
+                        <div class="item-details">
+                            <h3 th:text="${item.name}"></h3>
+                            <p>Item ID: <span th:text="${item.id}"></span></p>
+                        </div>
+                        <div class="item-quantity">
+                            <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 0.25rem;">Qty</p>
+                            <strong th:text="${item.quantity}"></strong>
+                        </div>
+                        <div class="item-price">
+                            <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 0.25rem;">Unit Price</p>
+                            <p class="price" th:text="${'$' + item.price}"></p>
+                        </div>
+                        <form th:action="@{/cart/remove-item}" method="post" style="margin: 0;">
+                            <input type="hidden" name="itemId" th:value="${item.id}">
+                            <button type="submit" class="remove-btn">Remove</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="cart-summary">
+                    <h2 class="summary-title">Order Summary</h2>
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span th:text="${'$' + totalPrice}"></span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping:</span>
+                        <span>Free</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax:</span>
+                        <span>$0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span th:text="${'$' + totalPrice}"></span>
+                    </div>
+                    <button class="btn btn-primary checkout-btn">Proceed to Checkout</button>
+                    <a th:href="@{/books}" class="continue-shopping">Continue Shopping</a>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div th:if="${items == null || items.size() == 0}" class="empty-cart">
+            <div class="empty-cart-icon">📭</div>
+            <h3>Your cart is empty</h3>
+            <p>Start shopping to add books to your cart!</p>
+            <a href="/books" class="btn btn-primary">Browse Books</a>
+        </div>
+    </main>
+
     <th:block th:replace="~{layout::footer}"></th:block>
-    <script th:src="@{/js/cart.js}"></script>
 </body>
 
 </html>

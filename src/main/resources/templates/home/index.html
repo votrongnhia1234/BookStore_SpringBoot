@@ -4,25 +4,114 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>ỨNG DỤNG QUẢN LÝ SÁCH</title>
+    <title>Home - BookStore</title>
     <th:block th:replace="~{layout::link-css}"></th:block>
     <th:block th:replace="~{layout::custom-css}"></th:block>
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            border-radius: 0.75rem;
+            margin: 2rem 0;
+        }
+        
+        .hero-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+        
+        .hero-section p {
+            font-size: 1.125rem;
+            color: #d1d5db;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            color: #1f2937;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 
 <body>
     <th:block th:replace="~{layout::header}"></th:block>
-    <div class="container">
-        <nav class="navbar navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    TRANG CHỦ ỨNG DỤNG QUẢN LÝ SÁCH - KẾT NỐI CSDL MYSQL
-                </a>
+    
+    <main class="container">
+        <section class="hero-section">
+            <h1>Welcome to BookStore</h1>
+            <p>Discover an amazing collection of books and manage your reading preferences effortlessly.</p>
+            <div class="hero-buttons">
+                <a href="/books" class="btn btn-primary">Browse Books</a>
+                <a href="/login" sec:authorize="!isAuthenticated()" class="btn btn-outline-primary">Get Started</a>
             </div>
-        </nav>
-    </div>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">📖</div>
+                <h3>Wide Selection</h3>
+                <p>Explore thousands of books across different genres and categories.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🛒</div>
+                <h3>Easy Shopping</h3>
+                <p>Add books to your cart and manage your wishlist seamlessly.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Fast & Reliable</h3>
+                <p>Experience quick navigation and reliable book management.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure</h3>
+                <p>Your account and preferences are protected with top security.</p>
+            </div>
+        </section>
+    </main>
+    
     <th:block th:replace="~{layout::footer}"></th:block>
 </body>
 

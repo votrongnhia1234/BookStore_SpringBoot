@@ -4,68 +4,154 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Sign Up</title>
+    <title>Sign Up - BookStore</title>
     <th:block th:replace="~{layout :: link-css}"></th:block>
     <th:block th:replace="~{layout::custom-css}"></th:block>
+    <style>
+        .register-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 200px);
+            padding: 2rem 0;
+        }
+        
+        .register-card {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        
+        .register-card h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        
+        .register-card .subtitle {
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #1f2937;
+        }
+        
+        .form-control {
+            width: 100%;
+        }
+        
+        .register-btn {
+            width: 100%;
+            padding: 0.75rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #6b7280;
+        }
+        
+        .login-link a {
+            color: #dc2626;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        
+        .login-link a:hover {
+            color: #991b1b;
+        }
+        
+        .error-list {
+            background-color: #fee2e2;
+            border: 1px solid #fecaca;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .error-list ul {
+            list-style: none;
+            margin: 0;
+        }
+        
+        .error-list li {
+            color: #7f1d1d;
+            margin-bottom: 0.5rem;
+        }
+        
+        .error-list li:last-child {
+            margin-bottom: 0;
+        }
+    </style>
 </head>
 
-<body style="background: #f6f7fc;">
+<body>
     <th:block th:replace="~{layout :: header}"></th:block>
-    <div class="container py-5 h-100">
-        <div class="row justify-content-center align-items-center h-100">
-            <div class="col-12 col-lg-6 col-md-8 col-xl-5">
-                <div class="card shadow" style="border-radius: 1rem;">
-                    <div class="card-body p-5 text-center">
-                        <h3>Sign up to <strong>Bookstore</strong></h3>
-                        <p class="mb-4 text-secondary">Welcome to Bookstore, please sign up to continue.</p>
-                        <form th:action="@{/register}" method="post">
+    
+    <main class="register-container">
+        <div class="register-card">
+            <h2>Create Account</h2>
+            <p class="subtitle">Join BookStore and start shopping today</p>
 
-                            <div th:if="${errors}" class="alert alert-danger justify-content-center" role="alert">
+            <div th:if="${errors}" class="error-list" role="alert">
+                <ul>
+                    <li th:each="error : ${errors}" th:text="${error}"></li>
+                </ul>
+            </div>
 
-                                <ul>
-                                    <li th:each="error : ${errors}" th:text="${error}" class="text-danger text-start">
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="form-group mb-4">
-                                <label for="email"></label>
-                                <input type="email" class="form-control" required id="email" name="email"
-                                    placeholder="Enter your email">
-                            </div>
-
-                            <div class="form-group mb-4">
-                                <label for="username"></label>
-                                <input type="text" class="form-control" required id="username" name="username"
-                                    placeholder="Enter your username">
-                            </div>
-
-                            <div class="form-group mb-4">
-                                <label for="password"></label>
-                                <input type="password" class="form-control" required id="password" name="password"
-                                    placeholder="Enter your password">
-                            </div>
-                            <div class="form-group mb-4">
-                                <label for="phone"></label>
-                                <input type="tel" class="form-control" required id="phone" name="phone"
-                                    placeholder="Enter your phone">
-                            </div>
-                            <div class="d-grid gap-2 form-action">
-
-                                <button type="submit" class="btn btn-primary btn-lg btn-block">Sign up</button>
-
-                                <p class="mt-3 mb-0">Already have an account? <a class="text-info text-center"
-                                        th:href="${'/login'}">Login in?</a></p>
-                            </div>
-                        </form>
-                    </div>
+            <form th:action="@{/register}" method="post">
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" class="form-control" id="email" name="email" 
+                        placeholder="example@email.com" required>
                 </div>
+
+                <div class="form-group">
+                    <label for="username">Username *</label>
+                    <input type="text" class="form-control" id="username" name="username"
+                        placeholder="Choose a username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password *</label>
+                    <input type="password" class="form-control" id="password" name="password"
+                        placeholder="Create a strong password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" class="form-control" id="phone" name="phone"
+                        placeholder="Your phone number" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary register-btn">Create Account</button>
+            </form>
+
+            <div class="login-link">
+                Already have an account? <a th:href="@{/login}">Sign in here</a>
             </div>
         </div>
-    </div>
+    </main>
+
     <th:block th:replace="~{layout :: footer}"></th:block>
 </body>
 

@@ -4,49 +4,116 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <title>Edit Book - BookStore</title>
     <th:block th:replace="~{layout::link-css}"></th:block>
     <th:block th:replace="~{layout::custom-css}"></th:block>
-    <title>Edit Book</title>
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-container h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control {
+            width: 100%;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .form-actions .btn {
+            flex: 1;
+            padding: 0.75rem;
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: #6b7280;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            margin-top: 1rem;
+        }
+        
+        .back-link:hover {
+            color: #1f2937;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
     <th:block th:replace="~{layout::header}"></th:block>
-    <div class="container">
-        <h1>Edit Book</h1>
-        <form th:action="@{/books/edit}" th:object="${book}" method="post">
-            <input type="hidden" th:field="*{id}">
-            <div class="col-6 mb-3">
-                <label class="form-label" for="title">Title:</label>
-                <input class="form-control" type="text" th:field="*{title}" id="title" required autofocus>
-                <span class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
-            </div>
-            <div class="col-6 mb-3">
-                <label class="form-label" for="author">Author:</label>
-                <input class="form-control" type="text" th:field="*{author}" id="author">
-                <span class="text-danger" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></span>
-            </div>
-            <div class="col-6 mb-3">
-                <label class="form-label" for="price">Price:</label>
-                <input class="form-control" type="text" th:field="*{price}" id="price">
-                <span class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
-            </div>
-            <div class="col-6 mb-3">
-                <label class="form-label" for="category">Category:</label><span class="text-danger">*</span>
-                <select class="form-control" id="category" name="category.id">
-                    <option value="">-- Select Category --</option>
-                    <option th:each="category : ${categories}" th:value="${category.getId()}"
-                        th:text="${category.getName()}" th:selected="${category.getId() == book.category.getId()}">
-                    </option>
-                </select>
-            </div>
-            <input type="submit" value="Save">
-        </form>
-        <br>
-        <a th:href="@{/books}">Back to List</a>
-    </div>
+    
+    <main class="container">
+        <div class="form-container">
+            <h1>✏️ Edit Book</h1>
+            
+            <form th:action="@{/books/edit}" th:object="${book}" method="post">
+                <input type="hidden" th:field="*{id}">
+                
+                <div class="form-group">
+                    <label class="form-label" for="title">Book Title <span class="text-danger">*</span></label>
+                    <input class="form-control" type="text" id="title" th:field="*{title}" required autofocus>
+                    <span class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="author">Author</label>
+                    <input class="form-control" type="text" id="author" th:field="*{author}">
+                    <span class="text-danger" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="price">Price <span class="text-danger">*</span></label>
+                    <input class="form-control" type="text" id="price" th:field="*{price}" required>
+                    <span class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="category">Category <span class="text-danger">*</span></label>
+                    <select class="form-control" id="category" name="category.id" required>
+                        <option value="">-- Select a Category --</option>
+                        <option th:each="category : ${categories}" th:value="${category.getId()}"
+                            th:text="${category.getName()}"
+                            th:selected="${category.getId() == book.category.getId()}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a th:href="@{/books}" class="btn btn-outline-primary" style="text-align: center; text-decoration: none;">Cancel</a>
+                </div>
+            </form>
+            
+            <a th:href="@{/books}" class="back-link">← Back to Books</a>
+        </div>
+    </main>
+
     <th:block th:replace="~{layout::footer}"></th:block>
 </body>
 
